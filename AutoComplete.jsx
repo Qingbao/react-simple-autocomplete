@@ -1,54 +1,7 @@
-let results = [
-    {
-        title: 'Variable names',
-        items: [{
-            id: 1,
-            name: 'a',
-            description: 'a'
-        }, {
-            id: 2,
-            name: 'ab',
-            description: 'ab'
-        }, {
-            id: 3,
-            name: 'abc',
-            description: 'abc'
-        }, {
-            id: 4,
-            name: 'abcd',
-            description: 'abcd'
-        }, {
-            id: 5,
-            name: 'abcde',
-            description: 'abcde'
-        }, {
-            id: 6,
-            name: 'abcdef',
-            description: 'abcdef'
-        }]
-    },
-    {
-        title: 'Variable descriptions',
-        items: [{
-            id: 1,
-            name: 'abbbbbbasdsadsaa',
-            description: 'dsadasdsa'
-        }, {
-            id: 2,
-            name: 'asdasdas',
-            description: 'dsadsavads'
-        }, {
-            id: 3,
-            name: 'aserwewqewq',
-            description: 'bvfgfgf'
-        },]
-    }
-];
-
 class AutoComplete extends React.Component {
     static propTypes = {
-        keyword: PropTypes.string.isRequired,
-        results: PropTypes.array.isRequired,
+        keyword: PropTypes.string,
+        results: PropTypes.array,
         OnViewAll: PropTypes.func
     };
     static defaultProps = {
@@ -58,39 +11,41 @@ class AutoComplete extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.OnViewAll = this.OnViewAll.bind(this);
     }
 
-    OnViewAll(matches) {
-        this.props.OnViewAll(matches);
+    OnViewAll() {
+        this.props.OnViewAll('test');
     }
 
     render() {
         let matches = [];
         //only show 5 matches
-        results.forEach(result => {
+        console.log(this.props.results);
+        this.props.results.forEach(result => {
+            console.log(result);
             if (result.items.length <= 5) {
-                match.push(<Match title={result.title} 
-                                  items={result.items} 
-                                  keyword={this.props.keyword}
-                                  length={result.items.length}/>);
+                matches.push(<Match title={result.title}
+                    items={result.items}
+                    keyword={this.props.keyword}
+                    length={result.items.length} />);
             } else {
                 let items = [];
                 for (let i = 0; i < 5; i++) {
                     items.push(result.items[i]);
                 }
-                match.push(<Match title={result.title} 
-                                  items={items} 
-                                  keyword={this.props.keyword}
-                                  length={result.items.length} 
-                                  OnViewAll={this.OnViewAll}/>);
+                matches.push(<Match title={result.title}
+                    items={items}
+                    keyword={this.props.keyword}
+                    length={result.items.length}
+                    OnViewAll={this.OnViewAll} />);
             }
         });
 
         return (
             <div className="card AutoComplete-card">
-                {match}
+                {matches}
             </div>
         );
     }
@@ -98,10 +53,10 @@ class AutoComplete extends React.Component {
 
 class Match extends React.Component {
     static propTypes = {
-        keyword: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        items: PropTypes.array.isRequired,
-        length: PropTypes.number.isRequired,
+        keyword: PropTypes.string,
+        title: PropTypes.string,
+        items: PropTypes.array,
+        length: PropTypes.number,
         OnViewAll: PropTypes.func
     };
     static defaultProps = {
@@ -116,7 +71,7 @@ class Match extends React.Component {
 
         this.OnViewAll = this.OnViewAll.bind(this);
     }
-   
+
     OnViewAll() {
         this.props.OnViewAll(this.props.title);
     }
